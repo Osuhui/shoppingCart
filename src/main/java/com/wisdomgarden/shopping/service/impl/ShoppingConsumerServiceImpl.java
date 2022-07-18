@@ -36,7 +36,7 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
 
     private static final List<String> ALCOHOL = new ArrayList<>(Arrays.asList("啤酒", "白酒", "伏特加"));
 
-    private static final int SLEEP_TIME = 10 * 1000;
+    private static final int SLEEP_TIME = 2 * 1000;
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#0.00");
 

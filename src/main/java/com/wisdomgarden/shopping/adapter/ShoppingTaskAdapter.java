@@ -27,7 +27,7 @@ public class ShoppingTaskAdapter {
 
     private static final LinkedBlockingDeque<ShoppingTaskInfo> LINKED_DEQUE = new LinkedBlockingDeque<>();
 
-    private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(10, 10, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+    private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(2, 10, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
     private static final ShoppingConsumerServiceImpl SHOPPING_CONSUMER_SERVICE = new ShoppingConsumerServiceImpl(LINKED_DEQUE);
 

@@ -1,7 +1,6 @@
 package com.wisdomgarden.shopping;
 
 import com.wisdomgarden.shopping.adapter.ShoppingTaskAdapter;
-import com.wisdomgarden.shopping.bean.ShoppingTaskInfo;
 import com.wisdomgarden.shopping.utils.ThreadUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -17,7 +16,7 @@ public class ShoppingMain {
         while (true) {
             try {
                 ShoppingTaskAdapter.autoAddTask();
-                ThreadUtil.sleep(60 * 1000);
+                ThreadUtil.sleep(10 * 1000);
             } catch (Exception e) {
                 log.error("Failed to shopping, exception occurred: " + e);
                 break;

@@ -4,11 +4,14 @@ import com.wisdomgarden.shopping.bean.*;
 import com.wisdomgarden.shopping.constant.Constant;
 import com.wisdomgarden.shopping.service.ShoppingConsumerService;
 import com.wisdomgarden.shopping.utils.FileUtil;
+import com.wisdomgarden.shopping.utils.PropertiesUtil;
 import com.wisdomgarden.shopping.utils.StringUtil;
 import com.wisdomgarden.shopping.utils.ThreadUtil;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -28,13 +31,13 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
 
     private static final String PRODUCT_PROPERTIES = "product.properties";
 
-    private static final List<String> ELECTRONIC = new ArrayList<>(Arrays.asList("ipad", "iphone", "显示器", "笔记本电脑", "键盘"));
+    private static final List<String> ELECTRONIC = new ArrayList<>();
 
-    private static final List<String> FOOD = new ArrayList<>(Arrays.asList("面包", "饼干", "蛋糕", "牛肉", "鱼", "蔬菜"));
+    private static final List<String> FOOD = new ArrayList<>();
 
-    private static final List<String> DAILY_NECESSITIES = new ArrayList<>(Arrays.asList("餐巾纸", "收纳箱", "咖啡杯", "雨伞"));
+    private static final List<String> DAILY_NECESSITIES = new ArrayList<>();
 
-    private static final List<String> ALCOHOL = new ArrayList<>(Arrays.asList("啤酒", "白酒", "伏特加"));
+    private static final List<String> ALCOHOL = new ArrayList<>();
 
     private static final int SLEEP_TIME = 2 * 1000;
 
@@ -44,6 +47,10 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
 
     public ShoppingConsumerServiceImpl(LinkedBlockingDeque<ShoppingTaskInfo> shoppingTask) {
         this.shoppingTask = shoppingTask;
+    }
+
+    static {
+        getProp();
     }
 
     @Override
@@ -189,5 +196,30 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
 
         log.info("amount after discount: " + promotionCount);
         return promotionCount;
+    }
+
+    /**
+     * 初始化商品
+     */
+    private static void getProp() {
+        try (InputStream inputStream = ShoppingConsumerServiceImpl.class.getClassLoader().getResourceAsStream(PRODUCT_PROPERTIES)) {
+            // 电子类
+            String electronic = PropertiesUtil.getProp(inputStream, "electronic");
+            ELECTRONIC.addAll(Arrays.asList(electronic.replace(Constant.SPACE_SIGN, Constant.EMPTY).split(Constant.COMMA_SIGN)));
+
+            // 食品类
+            String food = PropertiesUtil.getProp(inputStream, "food");
+            FOOD.addAll(Arrays.asList(food.replace(Constant.SPACE_SIGN, Constant.EMPTY).split(Constant.COMMA_SIGN)));
+
+            // 日用品
+            String dailyNecessities = PropertiesUtil.getProp(inputStream, "dailyNecessities");
+            DAILY_NECESSITIES.addAll(Arrays.asList(dailyNecessities.replace(Constant.SPACE_SIGN, Constant.EMPTY).split(Constant.COMMA_SIGN)));
+
+            // 日用品
+            String alcohol = PropertiesUtil.getProp(inputStream, "alcohol");
+            ALCOHOL.addAll(Arrays.asList(alcohol.replace(Constant.SPACE_SIGN, Constant.EMPTY).split(Constant.COMMA_SIGN)));
+        } catch (IOException e) {
+            log.info("Failed to get prop");
+        }
     }
 }

@@ -38,6 +38,16 @@ public class Constant {
     public static final String COLON_SIGN = ":";
 
     /**
+     * 符号：逗号
+     */
+    public static final String COMMA_SIGN = ",";
+
+    /**
+     * 空字符
+     */
+    public static final String EMPTY = "";
+
+    /**
      * 符号：空格
      */
     public static final String SPACE_SIGN = " ";

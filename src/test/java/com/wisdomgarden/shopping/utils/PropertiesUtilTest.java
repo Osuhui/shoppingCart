@@ -3,8 +3,8 @@ package com.wisdomgarden.shopping.utils;
 import org.junit.Test;
 
 import java.io.InputStream;
-
-import static org.junit.Assert.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Function
@@ -17,6 +17,8 @@ public class PropertiesUtilTest {
     public void getProp() {
         InputStream resourceAsStream = PropertiesUtilTest.class.getClassLoader().getResourceAsStream("product.properties");
         String electronic = PropertiesUtil.getProp(resourceAsStream, "electronic");
-        System.out.println(electronic);
+        String[] split = electronic.replace(" ", "").split(",");
+        List<String> strings = Arrays.asList(split);
+        System.out.println(strings);
     }
 }

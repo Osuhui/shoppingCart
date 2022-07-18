@@ -4,6 +4,8 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 /**
@@ -20,13 +22,13 @@ public class PropertiesUtil {
     /**
      * 获取properties值
      *
-     * @param inputStream properties
-     * @param key key
+     * @param inputStream inputStream
+     * @param key         key
      * @return String 值
      */
     public static String getProp(InputStream inputStream, String key) {
         try {
-            PROPERTIES.load(inputStream);
+            PROPERTIES.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             return PROPERTIES.getProperty(key);
         } catch (IOException e) {
             log.error("Failed to load properties");

@@ -100,6 +100,7 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
             log.info("no coupons to meet full discount");
             count = DECIMAL_FORMAT.format(promotionCount);
         } else {
+            log.info("coupon discount: " + couponInfoList.get(0).getDiscountAmount());
             count = DECIMAL_FORMAT.format(promotionCount - couponInfoList.get(0).getDiscountAmount());
         }
 
@@ -132,15 +133,17 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
         }
 
         // 将折扣信息按照折扣力度排序，然后根据产品类型分组
-        Map<String, List<PromotionInfo>> promotionMap = promotionInfos.stream().
+        Map<String, List<PromotionInfo>> promotionMap = infoList.stream().
                 sorted(Comparator.comparing(PromotionInfo::getDiscount, Comparator.reverseOrder())).
                 collect(Collectors.groupingBy(PromotionInfo::getProductType));
+        log.info("promotionMap: " + promotionMap);
 
         for (ShoppingCartInfo shoppingCartInfo : shoppingCartInfos) {
             // 电子类商品
             if (ELECTRONIC.contains(shoppingCartInfo.getProductName())) {
                 List<PromotionInfo> promotionInfoList = promotionMap.get(ProductEnum.ELECTRONIC.getName());
                 if (promotionMap.containsKey(ProductEnum.ELECTRONIC.getName()) && !promotionInfoList.isEmpty()) {
+                    log.info("electronic discount: " + shoppingCartInfo);
                     promotionCount += shoppingCartInfo.getProductNum() * shoppingCartInfo.getProductPrice() * promotionInfoList.get(0).getDiscount();
                 } else {
                     promotionCount += shoppingCartInfo.getProductNum() * shoppingCartInfo.getProductPrice();
@@ -152,6 +155,7 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
             if (FOOD.contains(shoppingCartInfo.getProductName())) {
                 List<PromotionInfo> promotionInfoList = promotionMap.get(ProductEnum.FOOD.getName());
                 if (promotionMap.containsKey(ProductEnum.FOOD.getName()) && !promotionInfoList.isEmpty()) {
+                    log.info("food discount: " + shoppingCartInfo);
                     promotionCount += shoppingCartInfo.getProductNum() * shoppingCartInfo.getProductPrice() * promotionInfoList.get(0).getDiscount();
                 } else {
                     promotionCount += shoppingCartInfo.getProductNum() * shoppingCartInfo.getProductPrice();
@@ -163,6 +167,7 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
             if (DAILY_NECESSITIES.contains(shoppingCartInfo.getProductName())) {
                 List<PromotionInfo> promotionInfoList = promotionMap.get(ProductEnum.DAILY_NECESSITIES.getName());
                 if (promotionMap.containsKey(ProductEnum.DAILY_NECESSITIES.getName()) && !promotionInfoList.isEmpty()) {
+                    log.info("daily necessities discount: " + shoppingCartInfo);
                     promotionCount += shoppingCartInfo.getProductNum() * shoppingCartInfo.getProductPrice() * promotionInfoList.get(0).getDiscount();
                 } else {
                     promotionCount += shoppingCartInfo.getProductNum() * shoppingCartInfo.getProductPrice();
@@ -174,12 +179,15 @@ public class ShoppingConsumerServiceImpl implements ShoppingConsumerService {
             if (ALCOHOL.contains(shoppingCartInfo.getProductName())) {
                 List<PromotionInfo> promotionInfoList = promotionMap.get(ProductEnum.ALCOHOL.getName());
                 if (promotionMap.containsKey(ProductEnum.ALCOHOL.getName()) && !promotionInfoList.isEmpty()) {
+                    log.info("alcohol discount: " + shoppingCartInfo);
                     promotionCount += shoppingCartInfo.getProductNum() * shoppingCartInfo.getProductPrice() * promotionInfoList.get(0).getDiscount();
                 } else {
                     promotionCount += shoppingCartInfo.getProductNum() * shoppingCartInfo.getProductPrice();
                 }
             }
         }
+
+        log.info("amount after discount: " + promotionCount);
         return promotionCount;
     }
 }
